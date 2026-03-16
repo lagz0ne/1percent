@@ -1,13 +1,6 @@
 ---
 name: autoresearch
-description: "Experiment loop discipline for autoresearch sessions — decision rules, git workflow, JSONL logging, anti-patterns"
-triggers:
-  - "autoresearch"
-  - "experiment loop"
-  - "benchmark"
-  - "METRIC"
-  - "autoresearch.jsonl"
-  - "autoresearch.md"
+description: "Experiment loop discipline for autoresearch sessions — decision rules, git workflow, JSONL logging, benchmark metrics, anti-patterns"
 ---
 
 # Autoresearch — Experiment Loop Skill
@@ -30,7 +23,7 @@ State lives in files (survives context resets):
 
 1. **Hypothesize** — one change, clear rationale, predicted impact
 2. **Implement** — minimal diff, touch only scoped files
-3. **Benchmark** — `bash autoresearch.sh | bash ${CLAUDE_PLUGIN_ROOT}/scripts/parse-metrics.sh`
+3. **Benchmark** — `bash autoresearch.sh 2>&1 | tee /dev/stderr | bash "${CLAUDE_PLUGIN_ROOT:-$(dirname autoresearch.sh)}/scripts/parse-metrics.sh"`
 4. **Decide** — based on target metric and direction from `autoresearch.md`
 5. **Record** — append JSONL, commit or revert
 6. **Report** — run#, change, before→after, decision
