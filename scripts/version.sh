@@ -34,12 +34,24 @@ NEW="${MAJOR}.${MINOR}.${PATCH}"
 # Update plugin.json
 sed -i "s/\"version\": \"${CURRENT}\"/\"version\": \"${NEW}\"/" "$PLUGIN_JSON"
 
-# Update marketplace.json if it has a version field
-if grep -q "\"version\"" "$MARKETPLACE_JSON" 2>/dev/null; then
-  sed -i "s/\"version\": \"${CURRENT}\"/\"version\": \"${NEW}\"/" "$MARKETPLACE_JSON"
+# Update marketplace.json — same version for the autoresearch plugin entry
+sed -i "s/\"version\": \"${CURRENT}\"/\"version\": \"${NEW}\"/" "$MARKETPLACE_JSON"
+
+# Verify both files have the new version
+PLUGIN_V=$(grep -oP '"version"\s*:\s*"\K[0-9]+\.[0-9]+\.[0-9]+' "$PLUGIN_JSON" | head -1)
+MARKET_V=$(grep -oP '"version"\s*:\s*"\K[0-9]+\.[0-9]+\.[0-9]+' "$MARKETPLACE_JSON" | head -1)
+
+if [ "$PLUGIN_V" != "$NEW" ] || [ "$MARKET_V" != "$NEW" ]; then
+  echo "Error: version mismatch after update"
+  echo "  plugin.json:      ${PLUGIN_V}"
+  echo "  marketplace.json: ${MARKET_V}"
+  echo "  expected:         ${NEW}"
+  exit 1
 fi
 
 echo "${CURRENT} → ${NEW}"
+echo "  plugin.json:      ${PLUGIN_V} ✓"
+echo "  marketplace.json: ${MARKET_V} ✓"
 echo ""
-echo "Files updated. To release:"
+echo "To release:"
 echo "  git add -A && git commit -m \"release: v${NEW}\" && git tag v${NEW} && git push && git push --tags"
