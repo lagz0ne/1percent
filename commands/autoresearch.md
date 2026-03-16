@@ -17,6 +17,14 @@ Ask the user (if not already clear):
 3. **Direction** — higher is better, or lower is better?
 4. **Scope** — which files/modules are in play?
 
+## Step 1.5: Gitignore Check
+
+Run the gitignore setup script to check if runtime files are excluded:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/skills/autoresearch/setup-gitignore.sh" .
+```
+
 ## Step 2: Create Branch
 
 ```bash
