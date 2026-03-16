@@ -1,0 +1,21 @@
+{
+  "name": "lagz0ne-1percent",
+  "description": "Autoresearch plugin — automated experiment loops for Claude Code",
+  "owner": {
+    "name": "lagz0ne",
+    "url": "https://github.com/lagz0ne"
+  },
+  "plugins": [
+    {
+      "name": "autoresearch",
+      "description": "Automated experiment loop for continuous improvement — bootstrap, benchmark, iterate, log. Port of karpathy/autoresearch for Claude Code.",
+      "version": "0.1.0",
+      "author": {
+        "name": "lagz0ne"
+      },
+      "source": "./",
+      "category": "development",
+      "homepage": "https://github.com/lagz0ne/1percent"
+    }
+  ]
+}
