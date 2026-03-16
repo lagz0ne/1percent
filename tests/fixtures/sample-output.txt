@@ -1,0 +1,17 @@
+Loading model from checkpoint...
+Epoch 1/10: loss=0.342
+Epoch 2/10: loss=0.281
+METRIC accuracy=0.95
+Some random log line
+METRIC duration_ms=1234
+METRIC loss=0.281
+Warning: GPU memory high
+METRIC throughput=1500.5
+METRIC negative_delta=-0.03
+METRIC sci_notation=1.5e-4
+NOT A METRIC line
+METRIC bad format no equals
+METRIC =noname
+METRIC 123invalid=456
+METRIC valid_underscore_name=99
+Training complete.

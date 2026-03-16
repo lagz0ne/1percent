@@ -1,0 +1,12 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Runtime session files (generated in consumer project roots)
+/autoresearch.md
+/autoresearch.sh
+/autoresearch.jsonl
+/autoresearch.checks.sh
+
+# Claude local settings
+.claude/projects/
