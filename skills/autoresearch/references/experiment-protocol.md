@@ -1,29 +1,36 @@
 # Experiment Protocol Reference
 
-## autoresearch.md Template
+## `.autoresearch/sessions/<session-id>/state.md` Template
 
 ```markdown
 # Autoresearch: {goal}
 
 ## Config
+- **Session**: `{session_id}`
+- **Extends**: `{prior_session_id|none}`
 - **Benchmark**: `{command}`
 - **Target metric**: `{name}` ({higher|lower} is better)
 - **Scope**: {files, directories, or modules in play}
 - **Branch**: `autoresearch/{slug}`
+- **Base commit**: `{short_hash}`
 - **Started**: {YYYY-MM-DDTHH:MM:SS}
 
 ## Rules
 1. One change per experiment
 2. Run benchmark after every change
 3. Keep if metric improves, discard if it regresses
-4. Log every run to autoresearch.jsonl
-5. Commit kept changes with `Result:` trailer
+4. Log every run to `.autoresearch/sessions/{session_id}/run.jsonl`
+5. Never commit `.autoresearch/**`
+6. Commit kept source changes with explicit pathspecs and `Result:` trailer
+7. Commit extracted learning to `research/learnings/{session_id}.md`
+8. Default resume reads only active state and the last 20 run lines
+9. Old sessions are cold storage unless asked for or used by `Extends:`
 
 ## Notes
 {Any context about the codebase, constraints, or prior attempts}
 ```
 
-## autoresearch.sh Template
+## `.autoresearch/sessions/<session-id>/benchmark.sh` Template
 
 ```bash
 #!/usr/bin/env bash
@@ -34,7 +41,7 @@ set -euo pipefail
 {benchmark_command} 2>&1 | tee /dev/stderr | bash "${CLAUDE_PLUGIN_ROOT:-$(dirname "$0")}/scripts/parse-metrics.sh"
 ```
 
-## autoresearch.checks.sh Template (Optional)
+## `.autoresearch/sessions/<session-id>/checks.sh` Template (Optional)
 
 Pre-flight checks before each experiment. If this exits non-zero, skip the benchmark.
 
@@ -115,3 +122,19 @@ Summary after 7 runs:
 - Best: accuracy=0.90 (run 5)
 - Improvement: +0.05 from baseline (+5.9%)
 ```
+
+## Git Rules
+
+- Runtime state under `.autoresearch/**` is never committed.
+- Do not use `git add .`.
+- Commit accepted code with explicit pathspecs only.
+- Discard rejected experiments by reverting only the experiment pathspecs.
+- Commit reusable learning to `research/learnings/<session-id>.md`; this prevents resumed or extended research from editing the same learning file.
+
+## Retention Rules
+
+- Hot: active session named by `.autoresearch/current`.
+- Warm: sessions touched in the last 14 days.
+- Cold: older sessions. Read them only when asked or when a new session has `Extends:`.
+- Context load: active `state.md` plus last 20 `run.jsonl` lines.
+- Prune cold runtime sessions. The durable record is `research/learnings/<session-id>.md`.

@@ -2,11 +2,8 @@
 .DS_Store
 Thumbs.db
 
-# Runtime session files (generated in consumer project roots)
-/autoresearch.md
-/autoresearch.sh
-/autoresearch.jsonl
-/autoresearch.checks.sh
+# Autoresearch runtime state (generated in consumer project roots)
+/.autoresearch/
 
 # Claude local settings
 .claude/projects/

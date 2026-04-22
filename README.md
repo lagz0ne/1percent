@@ -33,9 +33,20 @@ METRIC accuracy=0.95
 METRIC duration_ms=1234
 ```
 
-The plugin extracts these into JSON, compares against the previous run, and decides: keep (commit) or discard (revert). Every run is logged to `autoresearch.jsonl`.
+The plugin extracts these into JSON, compares against the previous run, and decides: keep (commit) or discard (revert). Every run is logged to ignored runtime state under `.autoresearch/sessions/<session-id>/run.jsonl`.
 
-State lives in files (`autoresearch.md`, `autoresearch.jsonl`) so the session survives context resets.
+In-progress state lives under ignored `.autoresearch/` files so the session survives context resets without polluting commits. Default resume reads only the active session and the last 20 run lines; older sessions are cold storage unless asked for or explicitly extended. Reusable learning is committed separately under `research/learnings/<session-id>.md`.
+
+## Git and State
+
+- Runtime state: `.autoresearch/sessions/<session-id>/` (ignored, never committed)
+- Active session: `.autoresearch/current`
+- Durable learning: `research/learnings/<session-id>.md` (committed)
+- Kept experiments: commit only intended source paths with a `Result:` trailer
+- Rejected experiments: revert only the experiment paths
+- Retention: active session is hot, sessions touched in the last 14 days are warm, older sessions are cold/on-demand
+
+This keeps active research resumable without filling git history with session trash or forcing every resume to load old logs.
 
 ## Components
 
@@ -47,11 +58,15 @@ State lives in files (`autoresearch.md`, `autoresearch.jsonl`) so the session su
 | Script | `scripts/parse-metrics.sh` | `METRIC name=value` → JSON (pure awk) |
 | Hooks | `hooks/stop.md`, `hooks/pre-compact.md` | Keep the loop alive across turns and compaction |
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
+
 ## Tests
 
 ```bash
 bash tests/test-parse-metrics.sh      # 18 assertions
-bash tests/test-experiment-flow.sh     # 10 assertions
+bash tests/test-experiment-flow.sh     # 21 assertions
 ```
 
 ## Versioning

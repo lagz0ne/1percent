@@ -9,7 +9,7 @@
     {
       "name": "autoresearch",
       "description": "Automated experiment loop for continuous improvement — bootstrap, benchmark, iterate, log. Port of karpathy/autoresearch for Claude Code.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": {
         "name": "lagz0ne"
       },

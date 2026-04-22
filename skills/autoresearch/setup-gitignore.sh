@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Check if autoresearch runtime files are gitignored, prompt to add if not.
+# Check if autoresearch runtime state is gitignored, prompt to add if not.
 # Usage: bash setup-gitignore.sh [project_root]
 
 ROOT="${1:-.}"
 GITIGNORE="${ROOT}/.gitignore"
 
 ENTRIES=(
-  "autoresearch.md"
-  "autoresearch.sh"
-  "autoresearch.jsonl"
-  "autoresearch.checks.sh"
+  ".autoresearch/"
 )
 
 missing=()
@@ -22,11 +19,11 @@ for entry in "${ENTRIES[@]}"; do
 done
 
 if [ ${#missing[@]} -eq 0 ]; then
-  echo "OK: all autoresearch runtime files already in .gitignore"
+  echo "OK: autoresearch runtime state already in .gitignore"
   exit 0
 fi
 
-echo "The following autoresearch runtime files are not in .gitignore:"
+echo "The following autoresearch runtime entries are not in .gitignore:"
 for m in "${missing[@]}"; do
   echo "  $m"
 done
@@ -35,7 +32,7 @@ printf "\nAdd them to %s? [y/N] " "$GITIGNORE"
 read -r answer
 if [[ "$answer" =~ ^[Yy]$ ]]; then
   [ -f "$GITIGNORE" ] && [ -s "$GITIGNORE" ] && [[ $(tail -c1 "$GITIGNORE") != "" ]] && echo >> "$GITIGNORE"
-  echo "# autoresearch runtime files" >> "$GITIGNORE"
+  echo "# autoresearch runtime state" >> "$GITIGNORE"
   for m in "${missing[@]}"; do
     echo "$m" >> "$GITIGNORE"
   done
