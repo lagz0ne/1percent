@@ -15,7 +15,8 @@ State lives in files (survives context resets):
 - `.autoresearch/sessions/<session-id>/benchmark.sh` — benchmark wrapper
 - `.autoresearch/sessions/<session-id>/run.jsonl` — run log (append-only)
 - `research/learnings/<session-id>.md` — extracted learning that should be committed
-- Git branch `autoresearch/*` — all work happens here
+
+The git workflow (worktree, new branch, current branch) is the user's choice — never create or switch branches without asking. The session id in `.autoresearch/current` identifies the active session; branch name is not used for detection.
 
 Runtime state under `.autoresearch/**` is in-progress state. Never commit it.
 

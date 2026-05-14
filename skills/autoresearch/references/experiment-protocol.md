@@ -11,7 +11,7 @@
 - **Benchmark**: `{command}`
 - **Target metric**: `{name}` ({higher|lower} is better)
 - **Scope**: {files, directories, or modules in play}
-- **Branch**: `autoresearch/{slug}`
+- **Branch**: `{current_branch_or_worktree}`
 - **Base commit**: `{short_hash}`
 - **Started**: {YYYY-MM-DDTHH:MM:SS}
 
@@ -107,7 +107,7 @@ Crashed experiment:
 /autoresearch "improve model accuracy on validation set"
 
 → User provides: benchmark=`python eval.py`, metric=accuracy, direction=higher
-→ Branch: autoresearch/improve-model-accuracy-on-validation-set
+→ User chooses git workflow (worktree, new branch, or current branch)
 → Baseline: accuracy=0.85
 
 Run 2: add dropout(0.3) to encoder → accuracy=0.87 → KEEP

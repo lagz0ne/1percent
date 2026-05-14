@@ -18,7 +18,7 @@ claude plugin add lagz0ne/1percent
 
 Claude will:
 1. Ask for your benchmark command, target metric, and direction
-2. Create an `autoresearch/*` branch
+2. Ask how to isolate the work (git worktree, new branch, or current branch)
 3. Run a baseline, log it
 4. Loop: hypothesize → implement → benchmark → keep or discard → repeat
 

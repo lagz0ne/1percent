@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.2 - 2026-05-14
+
+### Changed
+
+- Removed automatic `autoresearch/*` branch creation. Bootstrap command asks user how to isolate work (git worktree, new branch, or current branch).
+- Stop hook no longer keys session detection on branch name; relies solely on `.autoresearch/current`.
+- `state.md` template `Branch:` field records user's chosen branch instead of forced `autoresearch/{slug}`.
+
+### Fixed
+
+- Portable `touch -t` with BSD/GNU `date` detection in `tests/test-experiment-flow.sh` (previous `touch -d '30 days ago'` failed on macOS).
+
 ## 0.1.1 - 2026-04-22
 
 ### Changed
