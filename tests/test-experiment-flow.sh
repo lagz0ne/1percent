@@ -94,13 +94,13 @@ trap cleanup EXIT
 
 echo "=== test-experiment-flow ==="
 
-# Test 1: branch creation
-echo "--- branch creation ---"
+# Test 1: session works on user's chosen branch (no auto-branching)
+echo "--- session honors current branch ---"
 setup_temp_repo
 SLUG="optimize-speed"
-git checkout -b "autoresearch/${SLUG}" -q
+INITIAL_BRANCH=$(git branch --show-current)
 BRANCH=$(git branch --show-current)
-assert_eq "branch name" "autoresearch/${SLUG}" "$BRANCH"
+assert_eq "stays on user branch" "$INITIAL_BRANCH" "$BRANCH"
 
 # Test 2: baseline run + ignored session logging
 echo "--- baseline + JSONL ---"
@@ -190,7 +190,12 @@ assert_contains "recent run loaded" '"run":30' "$RECENT_RUNS"
 OLD_SESSION=".autoresearch/sessions/20200101T000000Z-old"
 mkdir -p "$OLD_SESSION"
 echo "# old" > "$OLD_SESSION/state.md"
-touch -d '30 days ago' "$OLD_SESSION" "$OLD_SESSION/state.md"
+if date -u -v-30d +%Y%m%d%H%M >/dev/null 2>&1; then
+  OLD_TS=$(date -u -v-30d +%Y%m%d%H%M)
+else
+  OLD_TS=$(date -u -d '30 days ago' +%Y%m%d%H%M)
+fi
+touch -t "$OLD_TS" "$OLD_SESSION" "$OLD_SESSION/state.md"
 find .autoresearch/sessions -mindepth 1 -maxdepth 1 -type d ! -name "$SESSION_ID" -mtime +14 -exec rm -rf {} +
 assert_file_not_exists "cold session pruned" "$OLD_SESSION/state.md"
 

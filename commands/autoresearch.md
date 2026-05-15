@@ -25,12 +25,18 @@ Run the gitignore setup script to check if runtime state is excluded:
 bash "${CLAUDE_PLUGIN_ROOT}/skills/autoresearch/setup-gitignore.sh" .
 ```
 
-## Step 2: Create Branch
+## Step 2: Confirm Git Workflow
+
+Do not create or switch branches automatically. Ask the user how they want to isolate this work:
+
+- a git worktree
+- a new branch they name
+- the current branch
+
+Slugify the goal for the session id only:
 
 ```bash
-# Slugify the goal
 SLUG=$(echo "$ARGUMENTS" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g' | head -c 50)
-git checkout -b "autoresearch/${SLUG}"
 ```
 
 ## Step 3: Write Ignored Session Files
@@ -55,7 +61,7 @@ Create `${SESSION_DIR}/state.md`:
 - **Benchmark**: `{benchmark_command}`
 - **Target metric**: `{metric_name}` ({direction})
 - **Scope**: {files/modules}
-- **Branch**: `autoresearch/{slug}`
+- **Branch**: `{current_branch_or_worktree}`
 - **Base commit**: `{git rev-parse --short HEAD}`
 - **Started**: {ISO timestamp}
 

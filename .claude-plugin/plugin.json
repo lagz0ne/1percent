@@ -1,5 +1,5 @@
 {
   "name": "autoresearch",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Automated experiment loop for continuous improvement — bootstrap, benchmark, iterate, log"
 }
